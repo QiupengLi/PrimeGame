@@ -4,19 +4,19 @@ package edu.monash.prime;
 public class NumberGenerator
 {
     //没有attributes,也需要default constructor
-    private String mode;
+//    private String mode;
 
     public NumberGenerator()
     {
-        mode = "easy";
+//        mode = "easy";
     }
 
-    public NumberGenerator(String mode)
-    {
-        this.mode = mode;
-    }
+//    public NumberGenerator(String mode)
+//    {
+//        this.mode = mode;
+//    }
 
-    public int generateRandomNumber(int maxNumber)
+    public int generateRandomNumber(int maxNumber,String mode)
     {
         int randomNumber;
         if ("easy".equals(mode))

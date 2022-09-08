@@ -50,11 +50,15 @@ public class PrimeChallenge
         // display welcome  message
         displayWelcomeMessage();
         //ask user input his/her name -----独立的功能单独形成一个方法。
-        Player player = askUserInputName();
+        askUserInputName();
         //ask user input level (1-100 / 1-400)
         // 1. 1-100
         // 2. 1-400
+        start();
+    }
 
+    public void start()
+    {
         while (true)
         {
             askUserInputLevel();
@@ -70,7 +74,6 @@ public class PrimeChallenge
             player.setTotalCorrect(0);
             player.setTotalScore(0);
         }
-
     }
 
     private void playGame(int maxNumber)
@@ -79,31 +82,32 @@ public class PrimeChallenge
         for (int round = 1; round <= 3; round++)
         {
             System.out.println("Round " + round + " Start!");
-            playOneRound(maxNumber);
+            playRound(maxNumber);
             // show round score;
             calculateScore();
         }
         System.out.println(player);
         // 算平均分
-        System.out.println("avg : " + (float) player.getTotalScore() / 3f);
+        System.out.println("avg round score: " + (float) player.getTotalScore() / 3f);
     }
 
     private void calculateScore()
     {
-        //1.算出本轮分数
-        int score = player.getRoundCorrect() == 3 ? 5 : player.getRoundCorrect();
+        // 1.算出本轮正确数
+        int roundScore = player.getRoundCorrect() == 10 ? 12 : player.getRoundCorrect();
 
         if (mode.equals("hard"))
         {
-            score = score * 2;
+            roundScore = roundScore * 2;
         }
 
-        if (player.getRoundCorrect() == 3)
+        if (player.getRoundCorrect() == 10)
         {
             mode = "hard";
         }
+
         // 2.把本轮分数赋值到本轮上
-        player.setRoundScore(score);
+        player.setRoundScore(roundScore);
         // 3.把当轮正确数加到总正确数上，分数也如此
         player.setTotalScore(player.getTotalScore() + player.getRoundScore());
         player.setTotalCorrect(player.getTotalCorrect() + player.getRoundCorrect());
@@ -115,76 +119,70 @@ public class PrimeChallenge
         player.setRoundCorrect(0);
     }
 
-    private void playOneRound(int levelMaxNumber)
+    private void playRound(int levelMaxNumber)
     {
-
-        int number = 0;
-        boolean isCheck = true;
-        NumberGenerator numberGenerator = new NumberGenerator(mode);
-        for (int time = 1; time <= 3; time++)
+        Input input = new Input();
+        int randomNumber = 0;
+        boolean switchBoolean = true;
+        NumberGenerator numberGenerator = new NumberGenerator();
+        for (int times = 1; times <= 10; times++)
         {
-            if (isCheck)
+            if (switchBoolean)
             {
-                number = numberGenerator.generateRandomNumber(levelMaxNumber);
+                randomNumber = numberGenerator.generateRandomNumber(levelMaxNumber, mode);
             }
-            System.out.println("Number: " + number);
-            System.out.println("Your chose: (Y/N/Q)");
-            String userGuess = new Scanner(System.in).nextLine();
-            boolean isPrime = validation.checkNumberIsPrimeNumber(number);
+            boolean isPrime = validation.checkNumberIsPrimeNumber(randomNumber);
+            System.out.println("Number: " + randomNumber);
+            char c = input.acceptCharInput("Your chose: (Y/N/Q)");
 
-            Respone respone = checkInputPrime(userGuess, isPrime, isCheck, time);
-            time = respone.getTime();
-            isCheck = respone.isCheck();
-
-            if (respone.isB())
+            String userGuess = c+"";
+            //QYN 为 true
+            boolean isYNQ = isInputYNQ(userGuess);
+            // 不是YNQ
+            if (!isYNQ){
+                times--;
+                switchBoolean = false;
+                // 当前循环停止，开始下一轮循环
+                continue;
+            }
+            // 是YNQ
+            if (isYNQ)
             {
-
-            } else
-            {
-                break;
+                // Q
+                if ("Q".equalsIgnoreCase(userGuess)){
+                    break;
+                }else {
+                    // YN
+                    boolean isRightAnswer = validation.checkAnswer(isPrime, userGuess);
+                    // YN 选择正确
+                    if (isRightAnswer)
+                    {
+                        System.out.println("判断正确! 请继续");
+                        player.setRoundCorrect(player.getRoundCorrect() + 1);
+                        switchBoolean = true;
+                    }else {
+                        System.out.println("判断错误! 该轮结束");
+                        switchBoolean = true;
+                    }
+                }
             }
         }
     }
 
-    public Respone checkInputPrime(String userGuess, boolean isPrime, boolean isCheck, int time)
+    // 随机数。
+    // 输入QYN。
+    // 判断是否为QYN。
+    // 如果是，判断是否符合答案。
+    // 如果不是，重新输入。
+
+    private boolean isInputYNQ(String userGuess)
     {
-        Respone respone = new Respone();
-        if ("Q".equalsIgnoreCase(userGuess))
+        if ("Q".equalsIgnoreCase(userGuess) || "N".equalsIgnoreCase(userGuess) || "Y".equalsIgnoreCase(userGuess))
         {
-            respone.setB(false);
-            respone.setCheck(isCheck);
-            respone.setTime(time);
-            return respone;
-        } else if ("Y".equalsIgnoreCase(userGuess) || "N".equalsIgnoreCase(userGuess))
-        {
-            boolean isRightAnswer = validation.checkAnswer(isPrime, userGuess);
-            if (isRightAnswer)
-            {
-                System.out.println("判断正确! 请继续");
-                player.setRoundCorrect(player.getRoundCorrect() + 1);
-                isCheck = true;
-                respone.setB(true);
-                respone.setCheck(isCheck);
-                respone.setTime(time);
-                return respone;
-            } else
-            {
-                System.out.println("判断错误! 该轮结束");
-                isCheck = true;
-                respone.setTime(time);
-                respone.setCheck(isCheck);
-                respone.setB(false);
-                return respone;
-            }
+            return true;
         } else
         {
-            System.out.println("请正确输入Y/N");
-            isCheck = false;
-            time--;
-            respone.setB(true);
-            respone.setCheck(isCheck);
-            respone.setTime(time);
-            return respone;
+            return false;
         }
     }
 
@@ -211,9 +209,8 @@ public class PrimeChallenge
         }
     }
 
-    public Player askUserInputName()
+    public void askUserInputName()
     {
-        Validation validation = new Validation();
 //        boolean isValidName = false;
         while (true)
         {
@@ -230,10 +227,7 @@ public class PrimeChallenge
             {
                 System.out.println("Illegal");
             }
-
         }
-        return player;
-
     }
 
     public void displayWelcomeMessage()
