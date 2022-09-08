@@ -3,16 +3,21 @@ package edu.monash.prime;
 public class Validation
 {
 
+    /**
+     * default constructor
+     * This method is to initialise the validation class.
+     */
     public Validation()
     {
 
     }
 
     /**
-     * 检查名字
+     * Check validity of name
+     * This mathod is to check the validity of name.
      *
-     * @param input     输入
-     * @param maxLength 最大长度
+     * @param input
+     * @param maxLength
      * @return boolean
      */
     public boolean checkName(String input, int maxLength)
@@ -29,9 +34,10 @@ public class Validation
 
 
     /**
-     * 检查数是质数
+     * Check if number is prime number
+     * This method is to check if number is a prime number.
      *
-     * @param number 数量
+     * @param number random number generate from NumberGenerator
      * @return boolean
      */
     public boolean checkNumberIsPrimeNumber(int number)
@@ -51,10 +57,20 @@ public class Validation
         return true;
     }
 
-    public boolean checkAnswer(boolean isPrime, String userGuess)
+    /**
+     * check player guess if is right.
+     * This method is to check if player guess and prime match.
+     *
+     * @param isPrime   taken from checkNumberIsPrimeNumber method
+     * @param playerGuess player's answer
+     * @return boolean
+     */
+    public boolean checkAnswer(boolean isPrime, String playerGuess)
     {
-        return ((isPrime && userGuess.equalsIgnoreCase("Y")) ||
-                (!isPrime && userGuess.equalsIgnoreCase("N")));
+        return ((isPrime && playerGuess.equalsIgnoreCase("Y")) ||
+                (!isPrime && playerGuess.equalsIgnoreCase("N")));
     }
 
 }
+
+

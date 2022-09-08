@@ -9,23 +9,26 @@ public class PrimeChallenge
     //client class
     private Player player;
     private Validation validation;
-
     private int levelMaxNumber;
-
     private String mode;
 
+
     /**
-     *
+     * default constructor
+     * this method is for initialising
      */
     public PrimeChallenge()
     {
-        player = new Player();//objects初始化
+        player = new Player();
         validation = new Validation();
         levelMaxNumber = 0;
         mode = "easy";
     }
 
     /**
+     * non-default constructor
+     * this method is a non-default constructor
+     *
      * @param player
      * @param validation
      * @param levelMaxNumber
@@ -39,32 +42,38 @@ public class PrimeChallenge
         this.mode = mode;
     }
 
+    /**
+     * main
+     * This is an accessor of code
+     *
+     * @param args
+     */
     public static void main(String[] args)
     {
         PrimeChallenge primeChallenge = new PrimeChallenge();
-        primeChallenge.init();
+        primeChallenge.start();
     }
 
-    public void init()
-    {
-        // display welcome  message
-        displayWelcomeMessage();
-        //ask user input his/her name -----独立的功能单独形成一个方法。
-        askUserInputName();
-        //ask user input level (1-100 / 1-400)
-        // 1. 1-100
-        // 2. 1-400
-        start();
-    }
+    /**
+     * Process start
+     */
 
+
+    /**
+     * This method is to start game again and again.
+     */
     public void start()
     {
         while (true)
         {
-            askUserInputLevel();
+            // display welcome  message
+            displayWelcomeMessage();
+            //ask user input his/her name
+            askPlayerInputName();
+            askPlayerInputLevel();
             // play game
             playGame(levelMaxNumber);
-            System.out.println("是否下一轮？  Y/N");
+            System.out.println("Do you want to play again?  Y/N");
             Scanner scanner = new Scanner(System.in);
             String input = scanner.next();
             if ("N".equalsIgnoreCase(input))
@@ -76,53 +85,69 @@ public class PrimeChallenge
         }
     }
 
+    /**
+     * Play game
+     * This method is to start a game.
+     *
+     * @param maxNumber 最大数量
+     */
     private void playGame(int maxNumber)
     {
         mode = "easy";
         for (int round = 1; round <= 3; round++)
         {
-            System.out.println("Round " + round + " Start!");
+            System.out.println("-----Round " + round + " Start!-----");
             playRound(maxNumber);
             // show round score;
             calculateScore();
         }
         System.out.println(player);
-        // 算平均分
-        System.out.println("avg round score: " + (float) player.getTotalScore() / 3f);
+        // calculate average score.
+        System.out.println("Your average round score: " + (float) player.getTotalScore() / 3f);
     }
 
+    /**
+     * This method is to calculate the score of player
+     */
     private void calculateScore()
     {
-        // 1.算出本轮正确数
+        // 1.Use this to increase the bonus and get round's correct number.
         int roundScore = player.getRoundCorrect() == 10 ? 12 : player.getRoundCorrect();
-
+        // Use this for hard mode to calculater the weight score.
         if (mode.equals("hard"))
         {
             roundScore = roundScore * 2;
         }
-
+        // Use this to change mode.
         if (player.getRoundCorrect() == 10)
         {
             mode = "hard";
         }
-
-        // 2.把本轮分数赋值到本轮上
+        // 2.Assign this round's score to the player object
         player.setRoundScore(roundScore);
-        // 3.把当轮正确数加到总正确数上，分数也如此
+        // 3.Add the number of correct rounds to the total number of correct rounds and the fractions as well.
         player.setTotalScore(player.getTotalScore() + player.getRoundScore());
         player.setTotalCorrect(player.getTotalCorrect() + player.getRoundCorrect());
-        // 4.打印输出该轮信息（当轮正确数、当轮获取的分数）
-
-        System.out.println("Round end, your roundCorrect is : " + player.getRoundCorrect() + "   and roundScore is :" + player.getRoundScore());
-        // 5.给当轮信息清零
+        // 4.Print out information about the round (number of corrects in the current round, scores obtained in the current round)
+        System.out.println("Round End\n" +
+                "Your round correct is : " + player.getRoundCorrect() + "\n"+
+                "Your round score is : " + player.getRoundScore());
+        // 5.Zeroing the correct number and score for the current round
         player.setRoundScore(0);
         player.setRoundCorrect(0);
     }
 
+    /**
+     * play round
+     * This method is to play round.
+     *
+     * @param levelMaxNumber
+     */
     private void playRound(int levelMaxNumber)
     {
         Input input = new Input();
         int randomNumber = 0;
+        // Use this to make sure access "if" statement first.
         boolean switchBoolean = true;
         NumberGenerator numberGenerator = new NumberGenerator();
         for (int times = 1; times <= 10; times++)
@@ -132,20 +157,19 @@ public class PrimeChallenge
                 randomNumber = numberGenerator.generateRandomNumber(levelMaxNumber, mode);
             }
             boolean isPrime = validation.checkNumberIsPrimeNumber(randomNumber);
+            // Make sure player can input yes or no.
             System.out.println("Number: " + randomNumber);
             char c = input.acceptCharInput("Your chose: (Y/N/Q)");
-
             String userGuess = c+"";
-            //QYN 为 true
             boolean isYNQ = isInputYNQ(userGuess);
-            // 不是YNQ
+            // if player's input is not Y,N,Q.
             if (!isYNQ){
                 times--;
                 switchBoolean = false;
-                // 当前循环停止，开始下一轮循环
+                // The current cycle stops and the next cycle begins.
                 continue;
             }
-            // 是YNQ
+            // if player's input is Y,N,Q.
             if (isYNQ)
             {
                 // Q
@@ -154,30 +178,33 @@ public class PrimeChallenge
                 }else {
                     // YN
                     boolean isRightAnswer = validation.checkAnswer(isPrime, userGuess);
-                    // YN 选择正确
+                    // YN and answer is right.
                     if (isRightAnswer)
                     {
-                        System.out.println("判断正确! 请继续");
+                        System.out.println("Correct!");
                         player.setRoundCorrect(player.getRoundCorrect() + 1);
                         switchBoolean = true;
-                    }else {
-                        System.out.println("判断错误! 该轮结束");
+                    }
+                    else
+                    {
+                        System.out.println("Incorrect!");
                         switchBoolean = true;
+                        break;
                     }
                 }
             }
         }
     }
 
-    // 随机数。
-    // 输入QYN。
-    // 判断是否为QYN。
-    // 如果是，判断是否符合答案。
-    // 如果不是，重新输入。
-
-    private boolean isInputYNQ(String userGuess)
+    /**
+     * this method is to check player's input if y,n,q
+     *
+     * @param playerGuess
+     * @return boolean
+     */
+    private boolean isInputYNQ(String playerGuess)
     {
-        if ("Q".equalsIgnoreCase(userGuess) || "N".equalsIgnoreCase(userGuess) || "Y".equalsIgnoreCase(userGuess))
+        if ("Q".equalsIgnoreCase(playerGuess) || "N".equalsIgnoreCase(playerGuess) || "Y".equalsIgnoreCase(playerGuess))
         {
             return true;
         } else
@@ -186,14 +213,16 @@ public class PrimeChallenge
         }
     }
 
-
-    public void askUserInputLevel()
+    /**
+     * This method is to ask player to input leve
+     */
+    public void askPlayerInputLevel()
     {
         //validation
         Input input = new Input();
-        String option = input.stringInput("Pleas, choose an option:  " +
-                "(A. 1 - 100    " +
-                "B. 1 - 400)");
+        String option = input.stringInput("Pleas, choose an option:\n" +
+                "A. 1 - 100(Random number between 1 to 100)\n" +
+                "B. 1 - 400(Random number between 1 to 400)");
         if (option.equalsIgnoreCase("A"))
         {
             levelMaxNumber = 100;
@@ -202,16 +231,17 @@ public class PrimeChallenge
             levelMaxNumber = 400;
         } else
         {
-//             levelMaxNumber = 0;
-            System.out.println("请输入A或B");
+            System.out.println("Please, enter A or B");
             // 递归调用
-            askUserInputLevel();
+            askPlayerInputLevel();
         }
     }
 
-    public void askUserInputName()
+    /**
+     * this mathod is to ask player input his or her name.
+     */
+    public void askPlayerInputName()
     {
-//        boolean isValidName = false;
         while (true)
         {
             Scanner scanner = new Scanner(System.in);
@@ -219,7 +249,6 @@ public class PrimeChallenge
             String name = scanner.nextLine();
             if (validation.checkName(name, 10))
             {
-//                isValidName = true;
                 player = new Player(name);
                 System.out.println("Hi, " + player.getName());
                 break;
@@ -230,9 +259,15 @@ public class PrimeChallenge
         }
     }
 
+    /**
+     * show the welcome message
+     */
     public void displayWelcomeMessage()
     {
         System.out.println("Hi！welcome to the Game");
+        System.out.println("This game is A Prime Challenge Game.");
+        System.out.println("You need to answer whether the given random is a prime number.\n" +
+                "Y for Yes, N for No, and Q for exiting the current round");
     }
 
 
