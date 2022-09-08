@@ -18,11 +18,11 @@ public class NumberGenerator
 
     public int generateRandomNumber(int maxNumber)
     {
-        int randomNumber = 0;
+        int randomNumber;
         if ("easy".equals(mode))
         {
             randomNumber = (int) (Math.random() * maxNumber + 1);
-        } else if ("hard".equals(mode))
+        } else
         {
             while (true)
             {

@@ -2,7 +2,7 @@ package edu.monash.prime;
 
 /**
  * test.Player class
- *
+ * <p>
  * Author: Qiupeng Li
  * Version: 1.0
  */
@@ -34,6 +34,7 @@ public class Player
     }
 
     //block comment
+
     /**
      * The non-default constructor for test.Player class
      * This constructor will initialise player name
@@ -45,53 +46,62 @@ public class Player
         this.name = name;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public int getRoundCorrect() {
+    public int getRoundCorrect()
+    {
         return roundCorrect;
     }
 
-    public void setRoundCorrect(int roundCorrect) {
+    public void setRoundCorrect(int roundCorrect)
+    {
         this.roundCorrect = roundCorrect;
     }
 
-    public int getTotalCorrect() {
+    public int getTotalCorrect()
+    {
         return totalCorrect;
     }
 
-    public void setTotalCorrect(int totalCorrect) {
+    public void setTotalCorrect(int totalCorrect)
+    {
         this.totalCorrect = totalCorrect;
     }
 
-    public int getRoundScore() {
+    public int getRoundScore()
+    {
         return roundScore;
     }
 
-    public void setRoundScore(int roundScore) {
+    public void setRoundScore(int roundScore)
+    {
         this.roundScore = roundScore;
     }
 
-    public int getTotalScore() {
+    public int getTotalScore()
+    {
         return totalScore;
     }
 
-    public void setTotalScore(int totalScore) {
+    public void setTotalScore(int totalScore)
+    {
         this.totalScore = totalScore;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Player{" +
                 "name='" + name + '\'' +
-                ", roundCorrect=" + roundCorrect +
                 ", totalCorrect=" + totalCorrect +
-                ", roundScore=" + roundScore +
                 ", totalScore=" + totalScore +
                 '}';
     }

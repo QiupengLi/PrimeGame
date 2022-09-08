@@ -3,7 +3,8 @@ package edu.monash.prime;
 
 import java.util.Scanner;
 
-public class PrimeChallenge {
+public class PrimeChallenge
+{
     //service class :test.NumberGenerator test.Validation test.Input test.Player
     //client class
     private Player player;
@@ -25,7 +26,6 @@ public class PrimeChallenge {
     }
 
     /**
-     *
      * @param player
      * @param validation
      * @param levelMaxNumber
@@ -85,30 +85,31 @@ public class PrimeChallenge {
         }
         System.out.println(player);
         // 算平均分
-        System.out.println("avg : "+ (float)player.getTotalCorrect() / 3f);
+        System.out.println("avg : " + (float) player.getTotalScore() / 3f);
     }
 
     private void calculateScore()
     {
         //1.算出本轮分数
-        int score = player.getRoundCorrect() == 10 ? 12 : player.getRoundCorrect();
+        int score = player.getRoundCorrect() == 3 ? 5 : player.getRoundCorrect();
 
         if (mode.equals("hard"))
         {
             score = score * 2;
         }
 
-        if(player.getRoundCorrect() == 10){
+        if (player.getRoundCorrect() == 3)
+        {
             mode = "hard";
         }
         // 2.把本轮分数赋值到本轮上
         player.setRoundScore(score);
         // 3.把当轮正确数加到总正确数上，分数也如此
-        player.setTotalScore(player.getTotalScore()+player.getRoundScore());
-        player.setTotalCorrect(player.getTotalCorrect()+player.getRoundCorrect());
+        player.setTotalScore(player.getTotalScore() + player.getRoundScore());
+        player.setTotalCorrect(player.getTotalCorrect() + player.getRoundCorrect());
         // 4.打印输出该轮信息（当轮正确数、当轮获取的分数）
 
-        System.out.println("Round end, your roundCorrect is : "+player.getRoundCorrect()+"   and roundScore is :" + player.getRoundScore());
+        System.out.println("Round end, your roundCorrect is : " + player.getRoundCorrect() + "   and roundScore is :" + player.getRoundScore());
         // 5.给当轮信息清零
         player.setRoundScore(0);
         player.setRoundCorrect(0);
@@ -122,82 +123,92 @@ public class PrimeChallenge {
         NumberGenerator numberGenerator = new NumberGenerator(mode);
         for (int time = 1; time <= 3; time++)
         {
-            if (isCheck){
-                number  = numberGenerator.generateRandomNumber(levelMaxNumber);
+            if (isCheck)
+            {
+                number = numberGenerator.generateRandomNumber(levelMaxNumber);
             }
             System.out.println("Number: " + number);
             System.out.println("Your chose: (Y/N/Q)");
             String userGuess = new Scanner(System.in).nextLine();
-            boolean isPrime = checkNumberIsPrimeNumber(number);
-            if ("Q".equalsIgnoreCase(userGuess))
+            boolean isPrime = validation.checkNumberIsPrimeNumber(number);
+
+            Respone respone = checkInputPrime(userGuess, isPrime, isCheck, time);
+            time = respone.getTime();
+            isCheck = respone.isCheck();
+
+            if (respone.isB())
+            {
+
+            } else
             {
                 break;
             }
-            else if ("Y".equalsIgnoreCase(userGuess) || "N".equalsIgnoreCase(userGuess))
-            {
-                boolean isRightAnswer = checkAnswer(isPrime, userGuess);
-                if (isRightAnswer)
-                {
-                    System.out.println("判断正确! 请继续");
-                    player.setRoundCorrect(player.getRoundCorrect() + 1);
-                    isCheck = true;
-                }
-                else
-                {
-                    System.out.println("判断错误! 该轮结束");
-                    isCheck = true;
-                    break;
-                }
-            }else {
-                System.out.println("请正确输入Y/N");
-                isCheck = false;
-                time--;
-            }
         }
     }
 
-    public boolean checkAnswer(boolean isPrime, String userGuess)
+    public Respone checkInputPrime(String userGuess, boolean isPrime, boolean isCheck, int time)
     {
-        return ((isPrime && userGuess.equalsIgnoreCase("Y")) ||
-                (!isPrime && userGuess.equalsIgnoreCase("N")));
-    }
-
-
-    public boolean checkNumberIsPrimeNumber(int number)
-    {
-        //12
-        if(number == 1)
-            return false;
-
-        for (int i = 2; i <= number / 2; i++)
+        Respone respone = new Respone();
+        if ("Q".equalsIgnoreCase(userGuess))
         {
-            if (number % i == 0)
-                return false;
+            respone.setB(false);
+            respone.setCheck(isCheck);
+            respone.setTime(time);
+            return respone;
+        } else if ("Y".equalsIgnoreCase(userGuess) || "N".equalsIgnoreCase(userGuess))
+        {
+            boolean isRightAnswer = validation.checkAnswer(isPrime, userGuess);
+            if (isRightAnswer)
+            {
+                System.out.println("判断正确! 请继续");
+                player.setRoundCorrect(player.getRoundCorrect() + 1);
+                isCheck = true;
+                respone.setB(true);
+                respone.setCheck(isCheck);
+                respone.setTime(time);
+                return respone;
+            } else
+            {
+                System.out.println("判断错误! 该轮结束");
+                isCheck = true;
+                respone.setTime(time);
+                respone.setCheck(isCheck);
+                respone.setB(false);
+                return respone;
+            }
+        } else
+        {
+            System.out.println("请正确输入Y/N");
+            isCheck = false;
+            time--;
+            respone.setB(true);
+            respone.setCheck(isCheck);
+            respone.setTime(time);
+            return respone;
         }
-        return true;
     }
+
+
     public void askUserInputLevel()
     {
         //validation
         Input input = new Input();
-         String option = input.stringInput("Pleas, choose an option:  " +
+        String option = input.stringInput("Pleas, choose an option:  " +
                 "(A. 1 - 100    " +
                 "B. 1 - 400)");
-         if (option.equalsIgnoreCase("A"))
-         {
-             levelMaxNumber = 100;
-         }
-         else if (option.equalsIgnoreCase("B"))
-         {
-             levelMaxNumber = 400;
-         }
-         else
-         {
+        if (option.equalsIgnoreCase("A"))
+        {
+            levelMaxNumber = 100;
+        } else if (option.equalsIgnoreCase("B"))
+        {
+            levelMaxNumber = 400;
+        } else
+        {
 //             levelMaxNumber = 0;
-             System.out.println("请输入A或B");
-             // 递归调用
-             askUserInputLevel();
-         }
+            System.out.println("请输入A或B");
+            // 递归调用
+            askUserInputLevel();
+        }
     }
 
     public Player askUserInputName()
@@ -215,13 +226,12 @@ public class PrimeChallenge {
                 player = new Player(name);
                 System.out.println("Hi, " + player.getName());
                 break;
+            } else
+            {
+                System.out.println("Illegal");
             }
-            else
-                {
-                    System.out.println("Illegal");
-                }
 
-            }
+        }
         return player;
 
     }
