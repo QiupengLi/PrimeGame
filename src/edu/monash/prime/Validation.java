@@ -1,11 +1,15 @@
 package edu.monash.prime;
 
+/**
+ * Validation
+ *
+ * @author Lenovo
+ * @date 2022/09/09
+ */
 public class Validation
 {
-
     /**
-     * default constructor
-     * This method is to initialise the validation class.
+     * Default constructor
      */
     public Validation()
     {
@@ -31,7 +35,6 @@ public class Validation
         }
         return input.length() <= maxLength;
     }
-
 
     /**
      * Check if number is prime number
@@ -70,7 +73,6 @@ public class Validation
         return ((isPrime && playerGuess.equalsIgnoreCase("Y")) ||
                 (!isPrime && playerGuess.equalsIgnoreCase("N")));
     }
-
 }
 
 

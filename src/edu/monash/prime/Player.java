@@ -1,40 +1,28 @@
 package edu.monash.prime;
 
 /**
- * test.Player class
- * <p>
+ * Player class
+ *
  * Author: Qiupeng Li
- * Version: 1.0
+ * Version: 5.0
  */
 
-public class Player
-{
-    private String name;
-    /**
-     * 挡轮正确题目数
-     */
-    private int roundCorrect;
-    /**
-     * 总正确题目数
-     */
-    private int totalCorrect;
-    /**
-     * 当轮分数。
-     */
-    private int roundScore;
+public class Player{
 
-    /**
-     * 总分
-     */
+    private String name;
+    private int roundCorrect;
+    private int totalCorrect;
+    private int roundScore;
     private int totalScore;
 
+    /**
+     * This is a default constructor.
+     *
+     */
     public Player()
     {
-        name = "No name";
+
     }
-
-    //block comment
-
     /**
      * The non-default constructor for test.Player class
      * This constructor will initialise player name
@@ -58,17 +46,6 @@ public class Player
     }
 
     /**
-     * Mutator
-     * This method is to set the name of player.
-     *
-     * @param name
-     */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    /**
      * Accessor
      * This method is to get the each of round correct number of questions.
      *
@@ -77,17 +54,6 @@ public class Player
     public int getRoundCorrect()
     {
         return roundCorrect;
-    }
-
-    /**
-     * Mutator
-     * This method is to set the each of round correct number of question.
-     *
-     * @param roundCorrect 圆正确
-     */
-    public void setRoundCorrect(int roundCorrect)
-    {
-        this.roundCorrect = roundCorrect;
     }
 
     /**
@@ -102,17 +68,6 @@ public class Player
     }
 
     /**
-     * Mutator
-     * This method is to set the total correct number of question.
-     *
-     * @param totalCorrect 完全正确
-     */
-    public void setTotalCorrect(int totalCorrect)
-    {
-        this.totalCorrect = totalCorrect;
-    }
-
-    /**
      * Accessor
      * This method is to get the each of round Score.
      *
@@ -121,17 +76,6 @@ public class Player
     public int getRoundScore()
     {
         return roundScore;
-    }
-
-    /**
-     * Mutator
-     * This method is to set the each of rounds Score.
-     *
-     * @param roundScore 轮得分
-     */
-    public void setRoundScore(int roundScore)
-    {
-        this.roundScore = roundScore;
     }
 
     /**
@@ -146,9 +90,53 @@ public class Player
 
     /**
      * Mutator
-     * This method is to set the total Score of three round game.
+     * This method is to set the name of player.
      *
-     * @param totalScore 总分
+     * @param name
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    /**
+     * Mutator
+     * This method is to set the round's correct number of question.
+     *
+     * @param totalCorrect
+     */
+    public void setRoundCorrect(int roundCorrect)
+    {
+        this.roundCorrect = roundCorrect;
+    }
+
+    /**
+     * Mutator
+     * This method is to set the total correct number of question.
+     *
+     * @param totalCorrect
+     */
+    public void setTotalCorrect(int totalCorrect)
+    {
+        this.totalCorrect = totalCorrect;
+    }
+
+    /**
+     * Mutator
+     * This method is to set the each of rounds Score.
+     *
+     * @param roundScore
+     */
+    public void setRoundScore(int roundScore)
+    {
+        this.roundScore = roundScore;
+    }
+
+    /**
+     * Mutator
+     * This method is to set total Score of three round game.
+     *
+     * @param totalScore
      */
     public void setTotalScore(int totalScore)
     {

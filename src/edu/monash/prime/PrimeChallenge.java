@@ -3,6 +3,12 @@ package edu.monash.prime;
 
 import java.util.Scanner;
 
+/**
+ * 面临主要挑战
+ *
+ * @author Lenovo
+ * @date 2022/09/09
+ */
 public class PrimeChallenge
 {
     //service class :test.NumberGenerator test.Validation test.Input test.Player
@@ -11,6 +17,7 @@ public class PrimeChallenge
     private Validation validation;
     private int levelMaxNumber;
     private String mode;
+
 
 
     /**
@@ -64,7 +71,8 @@ public class PrimeChallenge
      */
     public void start()
     {
-        while (true)
+        boolean i = true;
+        while (i)
         {
             // display welcome  message
             displayWelcomeMessage();
@@ -73,12 +81,20 @@ public class PrimeChallenge
             askPlayerInputLevel();
             // play game
             playGame(levelMaxNumber);
-            System.out.println("Do you want to play again?  Y/N");
-            Scanner scanner = new Scanner(System.in);
-            String input = scanner.next();
-            if ("N".equalsIgnoreCase(input))
-            {
-                break;
+            while (true){
+                System.out.println("Do you want to play again?  Y/N");
+                Scanner scanner = new Scanner(System.in);
+                String input = scanner.next();
+                if ("N".equalsIgnoreCase(input))
+                {
+                    i = false;
+                    break;
+                }
+                if ("Y".equalsIgnoreCase(input))
+                {
+                    break;
+                }
+                System.out.println("Please, enter correctly Y/N!");
             }
             player.setTotalCorrect(0);
             player.setTotalScore(0);
@@ -202,7 +218,7 @@ public class PrimeChallenge
      * @param playerGuess
      * @return boolean
      */
-    private boolean isInputYNQ(String playerGuess)
+    public boolean isInputYNQ(String playerGuess)
     {
         if ("Q".equalsIgnoreCase(playerGuess) || "N".equalsIgnoreCase(playerGuess) || "Y".equalsIgnoreCase(playerGuess))
         {

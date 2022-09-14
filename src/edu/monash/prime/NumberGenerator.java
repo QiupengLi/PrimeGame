@@ -1,19 +1,21 @@
 package edu.monash.prime;
 
-
+/**
+ * 数字生成器
+ *
+ * @author Lenovo
+ * @date 2022/09/09
+ */
 public class NumberGenerator
 {
-    //没有attributes,也需要default constructor
-//    private String mode;
-
     /**
      * NumberGenerator
      * This is a default constructor
      */
     public NumberGenerator()
     {
-    }
 
+    }
 
     /**
      * generateRandomNumber
@@ -35,7 +37,7 @@ public class NumberGenerator
             while (true)
             {
                 randomNumber = (int) (Math.random() * maxNumber + 1);
-                // 若是偶数则会为0，并且个位数不为5,那么就不满足条件
+                //
                 if (randomNumber % 2 != 0 && randomNumber % 10 != 5)
                 {
                     break;
@@ -44,5 +46,4 @@ public class NumberGenerator
         }
         return randomNumber;
     }
-
 }
